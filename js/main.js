@@ -33,8 +33,8 @@ function main() {
   });
 	
 	
-    // Nivo Lightbox 
-    $('.portfolio-item a').nivoLightbox({
+     
+    $('.portfolio-item a').tagLightbox({
             effect: 'slideDown',  
             keyboardNav: true,                            
         });

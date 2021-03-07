@@ -1,6 +1,6 @@
 /*
- * Nivo Lightbox v1.2.0
- * http://dev7studios.com/nivo-lightbox
+ * Tag Lightbox v1.2.0
+ * http://dev7studios.com/tag-lightbox
  *
  * Copyright 2013, Dev7studios
  * Free to use and abuse under the MIT license.
@@ -9,7 +9,7 @@
 
 ;(function($, window, document, undefined){
 
-    var pluginName = 'nivoLightbox',
+    var pluginName = 'tagLightbox',
         defaults = {
             effect: 'fade',
             theme: 'default',
@@ -25,7 +25,7 @@
             errorMessage: 'The requested content cannot be loaded. Please try again later.'
         };
 
-    function NivoLightbox(element, options){
+    function TagLightbox(element, options){
         this.el = element;
         this.$el = $(this.el);
 
@@ -37,14 +37,14 @@
         this.init();
     }
 
-    NivoLightbox.prototype = {
+    TagLightbox.prototype = {
 
         init: function(){
 			var $this = this;
 
 			// Need this so we don't use CSS transitions in mobile
-			if(!$('html').hasClass('nivo-lightbox-notouch')) $('html').addClass('nivo-lightbox-notouch');
-			if('ontouchstart' in document) $('html').removeClass('nivo-lightbox-notouch');
+			if(!$('html').hasClass('tag-lightbox-notouch')) $('html').addClass('tag-lightbox-notouch');
+			if('ontouchstart' in document) $('html').removeClass('tag-lightbox-notouch');
 
 			// Setup the click
             this.$el.on('click', function(e){
@@ -58,9 +58,9 @@
                     // Escape
                     if(code == 27) $this.destructLightbox();
                     // Left
-                    if(code == 37) $('.nivo-lightbox-prev').trigger('click');
+                    if(code == 37) $('.tag-lightbox-prev').trigger('click');
                     // Right
-                    if(code == 39) $('.nivo-lightbox-next').trigger('click');
+                    if(code == 39) $('.tag-lightbox-next').trigger('click');
 				});
 			}
 
@@ -80,10 +80,10 @@
             this.options.beforeShowLightbox.call(this);
             var lightbox = this.constructLightbox();
             if(!lightbox) return;
-            var content = lightbox.find('.nivo-lightbox-content');
+            var content = lightbox.find('.tag-lightbox-content');
             if(!content) return;
 
-            $('body').addClass('nivo-lightbox-body-effect-'+ this.options.effect);
+            $('body').addClass('tag-lightbox-body-effect-'+ this.options.effect);
 
 			this.processContent( content, currentLink );
 
@@ -91,10 +91,10 @@
             if(this.$el.attr('data-lightbox-gallery')){
                 var galleryItems = $('[data-lightbox-gallery="'+ this.$el.attr('data-lightbox-gallery') +'"]');
 
-                $('.nivo-lightbox-nav').show();
+                $('.tag-lightbox-nav').show();
 
 				// Prev
-                $('.nivo-lightbox-prev').off('click').on('click', function(e){
+                $('.tag-lightbox-prev').off('click').on('click', function(e){
                     e.preventDefault();
                     var index = galleryItems.index(currentLink);
                     currentLink = galleryItems.eq(index - 1);
@@ -104,7 +104,7 @@
                 });
 
                 // Next
-                $('.nivo-lightbox-next').off('click').on('click', function(e){
+                $('.tag-lightbox-next').off('click').on('click', function(e){
                     e.preventDefault();
                     var index = galleryItems.index(currentLink);
                     currentLink = galleryItems.eq(index + 1);
@@ -115,7 +115,7 @@
             }
 
             setTimeout(function(){
-                lightbox.addClass('nivo-lightbox-open');
+                lightbox.addClass('tag-lightbox-open');
                 $this.options.afterShowLightbox.call(this, [ lightbox ]);
             }, 1); // For CSS transitions
         },
@@ -153,7 +153,7 @@
                 href = link.attr('href'),
                 video = href.match(/(youtube|youtu|vimeo)\.(com|be)\/(watch\?v=([\w-]+)|([\w-]+))/);
 
-            content.html('').addClass('nivo-lightbox-loading');
+            content.html('').addClass('tag-lightbox-loading');
 
             // Is HiDPI?
             if(this.isHidpi() && link.attr('data-lightbox-hidpi')){
@@ -164,19 +164,19 @@
             if(href.match(/\.(jpeg|jpg|gif|png)$/i) !== null){
                 var img = $('<img>', { src: href });
                 img.one('load', function() {
-					var wrap = $('<div class="nivo-lightbox-image" />');
+					var wrap = $('<div class="tag-lightbox-image" />');
                     wrap.append(img);
-					content.html(wrap).removeClass('nivo-lightbox-loading');
+					content.html(wrap).removeClass('tag-lightbox-loading');
 
 					// Vertically center images
 					wrap.css({
-						'line-height': $('.nivo-lightbox-content').height() +'px',
-						'height': $('.nivo-lightbox-content').height() +'px' // For Firefox
+						'line-height': $('.tag-lightbox-content').height() +'px',
+						'height': $('.tag-lightbox-content').height() +'px' // For Firefox
 					});
 					$(window).resize(function() {
 						wrap.css({
-							'line-height': $('.nivo-lightbox-content').height() +'px',
-							'height': $('.nivo-lightbox-content').height() +'px' // For Firefox
+							'line-height': $('.tag-lightbox-content').height() +'px',
+							'height': $('.tag-lightbox-content').height() +'px' // For Firefox
 						});
 					});
 				}).each(function() {
@@ -184,26 +184,26 @@
 				});
 
 				img.error(function() {
-					var wrap = $('<div class="nivo-lightbox-error"><p>'+ $this.options.errorMessage +'</p></div>');
-                    content.html(wrap).removeClass('nivo-lightbox-loading');
+					var wrap = $('<div class="tag-lightbox-error"><p>'+ $this.options.errorMessage +'</p></div>');
+                    content.html(wrap).removeClass('tag-lightbox-loading');
 				});
             }
             // Video (Youtube/Vimeo)
             else if(video){
                 var src = '',
-                    classTerm = 'nivo-lightbox-video';
+                    classTerm = 'tag-lightbox-video';
 
                 if(video[1] == 'youtube'){
                     src = 'http://www.youtube.com/embed/'+ video[4];
-                    classTerm = 'nivo-lightbox-youtube';
+                    classTerm = 'tag-lightbox-youtube';
                 }
                 if(video[1] == 'youtu'){
                     src = 'http://www.youtube.com/embed/'+ video[3];
-                    classTerm = 'nivo-lightbox-youtube';
+                    classTerm = 'tag-lightbox-youtube';
                 }
                 if(video[1] == 'vimeo'){
                     src = 'http://player.vimeo.com/video/'+ video[3];
-                    classTerm = 'nivo-lightbox-vimeo';
+                    classTerm = 'tag-lightbox-vimeo';
                 }
 
                 if(src){
@@ -216,7 +216,7 @@
                         scrolling: 'auto'
                     });
                     content.html(iframeVideo);
-                    iframeVideo.load(function(){ content.removeClass('nivo-lightbox-loading'); });
+                    iframeVideo.load(function(){ content.removeClass('tag-lightbox-loading'); });
                 }
             }
             // AJAX
@@ -225,9 +225,9 @@
 					url: href,
 					cache: false,
 					success: function(data) {
-						var wrap = $('<div class="nivo-lightbox-ajax" />');
+						var wrap = $('<div class="tag-lightbox-ajax" />');
 						wrap.append(data);
-						content.html(wrap).removeClass('nivo-lightbox-loading');
+						content.html(wrap).removeClass('tag-lightbox-loading');
 
 						// Vertically center html
 						if(wrap.outerHeight() < content.height()){
@@ -248,17 +248,17 @@
 						});
 					},
 					error: function(){
-						var wrap = $('<div class="nivo-lightbox-error"><p>'+ $this.options.errorMessage +'</p></div>');
-                        content.html(wrap).removeClass('nivo-lightbox-loading');
+						var wrap = $('<div class="tag-lightbox-error"><p>'+ $this.options.errorMessage +'</p></div>');
+                        content.html(wrap).removeClass('tag-lightbox-loading');
 					}
 				});
             }
             // Inline HTML
             else if(href.substring(0, 1) == '#' && link.attr('data-lightbox-type') == 'inline'){
                 if($(href).length){
-                    var wrap = $('<div class="nivo-lightbox-inline" />');
+                    var wrap = $('<div class="tag-lightbox-inline" />');
 					wrap.append($(href).clone().show());
-                    content.html(wrap).removeClass('nivo-lightbox-loading');
+                    content.html(wrap).removeClass('tag-lightbox-loading');
 
                     // Vertically center html
 					if(wrap.outerHeight() < content.height()){
@@ -278,48 +278,48 @@
 						}
 					});
 				} else {
-					var wrapError = $('<div class="nivo-lightbox-error"><p>'+ $this.options.errorMessage +'</p></div>');
-                    content.html(wrapError).removeClass('nivo-lightbox-loading');
+					var wrapError = $('<div class="tag-lightbox-error"><p>'+ $this.options.errorMessage +'</p></div>');
+                    content.html(wrapError).removeClass('tag-lightbox-loading');
 				}
             }
             // iFrame (default)
             else if(link.attr('data-lightbox-type') == 'iframe'){
                 var iframe = $('<iframe>', {
                     src: href,
-                    'class': 'nivo-lightbox-item',
+                    'class': 'tag-lightbox-item',
                     frameborder: 0,
                     vspace: 0,
                     hspace: 0,
                     scrolling: 'auto'
                 });
                 content.html(iframe);
-                iframe.load(function(){ content.removeClass('nivo-lightbox-loading'); });
+                iframe.load(function(){ content.removeClass('tag-lightbox-loading'); });
             } else {
 				return false;
 			}
 
             // Set the title
             if(link.attr('title')){
-                var titleWrap = $('<span>', { 'class': 'nivo-lightbox-title' });
+                var titleWrap = $('<span>', { 'class': 'tag-lightbox-title' });
                 titleWrap.text(link.attr('title'));
-                $('.nivo-lightbox-title-wrap').html(titleWrap);
+                $('.tag-lightbox-title-wrap').html(titleWrap);
             } else {
-                $('.nivo-lightbox-title-wrap').html('');
+                $('.tag-lightbox-title-wrap').html('');
             }
         },
 
         constructLightbox: function(){
-            if($('.nivo-lightbox-overlay').length) return $('.nivo-lightbox-overlay');
+            if($('.tag-lightbox-overlay').length) return $('.tag-lightbox-overlay');
 
-            var overlay = $('<div>', { 'class': 'nivo-lightbox-overlay nivo-lightbox-theme-'+ this.options.theme +' nivo-lightbox-effect-'+ this.options.effect });
-            var wrap = $('<div>', { 'class': 'nivo-lightbox-wrap' });
-            var content = $('<div>', { 'class': 'nivo-lightbox-content' });
-            var nav = $('<a href="#" class="nivo-lightbox-nav nivo-lightbox-prev">Previous</a><a href="#" class="nivo-lightbox-nav nivo-lightbox-next">Next</a>');
-            var close = $('<a href="#" class="nivo-lightbox-close" title="Close">Close</a>');
-            var title = $('<div>', { 'class': 'nivo-lightbox-title-wrap' });
+            var overlay = $('<div>', { 'class': 'tag-lightbox-overlay tag-lightbox-theme-'+ this.options.theme +' tag-lightbox-effect-'+ this.options.effect });
+            var wrap = $('<div>', { 'class': 'tag-lightbox-wrap' });
+            var content = $('<div>', { 'class': 'tag-lightbox-content' });
+            var nav = $('<a href="#" class="tag-lightbox-nav tag-lightbox-prev">Previous</a><a href="#" class="tag-lightbox-nav tag-lightbox-next">Next</a>');
+            var close = $('<a href="#" class="tag-lightbox-close" title="Close">Close</a>');
+            var title = $('<div>', { 'class': 'tag-lightbox-title-wrap' });
 
             var isMSIE = /*@cc_on!@*/0;
-            if(isMSIE) overlay.addClass('nivo-lightbox-ie');
+            if(isMSIE) overlay.addClass('tag-lightbox-ie');
 
             wrap.append(content);
             wrap.append(title);
@@ -331,7 +331,7 @@
             var $this = this;
             if($this.options.clickOverlayToClose){
                 overlay.on('click', function(e){
-                    if(e.target === this || $(e.target).hasClass('nivo-lightbox-content') || $(e.target).hasClass('nivo-lightbox-image')){
+                    if(e.target === this || $(e.target).hasClass('tag-lightbox-content') || $(e.target).hasClass('tag-lightbox-image')){
                         $this.destructLightbox();
                     }
                 });
@@ -349,23 +349,23 @@
             var $this = this;
             this.options.beforeHideLightbox.call(this);
 
-            $('.nivo-lightbox-overlay').removeClass('nivo-lightbox-open');
-            $('.nivo-lightbox-nav').hide();
-            $('body').removeClass('nivo-lightbox-body-effect-'+ $this.options.effect);
+            $('.tag-lightbox-overlay').removeClass('tag-lightbox-open');
+            $('.tag-lightbox-nav').hide();
+            $('body').removeClass('tag-lightbox-body-effect-'+ $this.options.effect);
 
             // For IE
             var isMSIE = /*@cc_on!@*/0;
             if(isMSIE){
-                $('.nivo-lightbox-overlay iframe').attr("src", " ");
-                $('.nivo-lightbox-overlay iframe').remove();
+                $('.tag-lightbox-overlay iframe').attr("src", " ");
+                $('.tag-lightbox-overlay iframe').remove();
             }
 
             // Remove click handlers
-            $('.nivo-lightbox-prev').off('click');
-            $('.nivo-lightbox-next').off('click');
+            $('.tag-lightbox-prev').off('click');
+            $('.tag-lightbox-next').off('click');
 
             // Empty content (for videos)
-            $('.nivo-lightbox-content').empty();
+            $('.tag-lightbox-content').empty();
 
             this.options.afterHideLightbox.call(this);
         },
@@ -385,7 +385,7 @@
     $.fn[pluginName] = function(options){
         return this.each(function(){
             if(!$.data(this, pluginName)){
-                $.data(this, pluginName, new NivoLightbox(this, options));
+                $.data(this, pluginName, new TagLightbox(this, options));
             }
         });
     };

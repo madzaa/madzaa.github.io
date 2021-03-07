@@ -361,8 +361,8 @@ header .intro-text {
 }
 .testimonial-image, .testimonial-image img {
 	display: block;
-	width: 64px;
-	height: 64px;
+	width: 128px;
+	height: 128px;
 }
 .testimonial-content {
 	position: relative;
